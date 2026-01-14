@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7pamgn102xbm"]
+
+[ext_resource type="Texture2D" uid="uid://ulc5ljf1jf34" path="res://test shape 1/cube_texture.jpg" id="1_2743m"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wq4k0"]
+
+[node name="test shape 1" type="Area3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_wq4k0")
+debug_color = Color(0.3966628, 0.92440915, 1.076869, 1)
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+texture = ExtResource("1_2743m")
