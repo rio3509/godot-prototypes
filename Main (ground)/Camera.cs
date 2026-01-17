@@ -1,19 +1,21 @@
 using Godot;
 using System;
 
-public partial class CameraBody3d : CharacterBody3D
+public partial class Camera : Camera3D
 {
 	//3D code takes measurements in METERS not pixels
 	
 	//set camera movement speed
 	[Export]
-	public int Speed { get; set; } = 14;
+	public int Speed { get; set; } = 1;
 	
 	//set targetvelocity to 0
 	private Vector3 _targetVelocity = Vector3.Zero;
-	
+	 
 	public override void _PhysicsProcess(double delta)
 	{
+		//MOVEMENT
+		
 		//local variable for input direction
 		var direction = Vector3.Zero;
 		
@@ -27,11 +29,11 @@ public partial class CameraBody3d : CharacterBody3D
 			direction.X -= 1.0f;
 		}
 		//code forward/backward (z) movement
-		if (Input.IsActionPressed("move_forward"))
+		if (Input.IsActionPressed("move_backward"))
 		{
 			direction.Z += 1.0f;
 		}
-		if (Input.IsActionPressed("move_backward"))
+		if (Input.IsActionPressed("move_forward"))
 		{
 			direction.Z -= 1.0f;
 		}
@@ -50,7 +52,7 @@ public partial class CameraBody3d : CharacterBody3D
 		{
 			direction = direction.Normalized();
 			
-			GetNode<Marker3D>("CameraPivot").Basis = Basis.LookingAt(direction);
+			//Basis = Basis.LookingAt(direction);
 		}
 	
 		 //Velocities
@@ -59,7 +61,14 @@ public partial class CameraBody3d : CharacterBody3D
 		_targetVelocity.Y = direction.Y * Speed;
 		
 		  // Moving the camera
-		Velocity = _targetVelocity;
-		MoveAndSlide();
+		Vector3 position = GetGlobalPosition();
+		position += _targetVelocity;
+		SetGlobalPosition(position);
+		//global_translate(direction);
+		
+		//ROTATION
+		
+		var test = GetViewport().GetMousePosition();
+		GD.Print(test);
 	}
 }
