@@ -5,9 +5,11 @@ public partial class Camera : Camera3D
 {
 	//3D code takes measurements in METERS not pixels
 	
-	//set camera movement speed
+	//set camera movement and rotation speed
 	[Export]
 	public int Speed { get; set; } = 1;
+	[Export]
+	public float RotateSpeed { get; set; } = 0.5f;
 	
 	//set targetvelocity to 0
 	private Vector3 _targetVelocity = Vector3.Zero;
@@ -68,7 +70,41 @@ public partial class Camera : Camera3D
 		
 		//ROTATION
 		
-		var test = GetViewport().GetMousePosition();
-		GD.Print(test);
+		//basically this:
+		// Rotate around the object's local X axis by 0.1 radians.
+		//RotateObjectLocal(new Vector3(1, 0, 0), 0.1f);
+		//until Basis == Basis.LookingAt(direction);
+		
+		//get mouse position
+		var mousePos = GetViewport().GetMousePosition();
+		GD.Print(mousePos);
+		
+		//horizontal mouse rotation
+		if (mousePos.X > ((1152 + 750) / 2))
+		{
+			RotateObjectLocal(new Vector3(0, 1, 0), (-0.1f * RotateSpeed));
+		}
+		if (mousePos.X < ((1152 - 750) / 2))
+		{
+			RotateObjectLocal(new Vector3(0, 1, 0), (0.1f * RotateSpeed));
+		}
+		else
+		{
+			RotateObjectLocal(new Vector3(0, 1, 0), (0f * RotateSpeed));
+		}
+		
+		//vertical mouse rotation
+		if (mousePos.Y > (648 + 500) / 2)
+		{
+			RotateObjectLocal(new Vector3(1, 0, 0), (-0.1f * RotateSpeed));
+		}
+		if (mousePos.Y < (648 - 500) / 2)
+		{
+			RotateObjectLocal(new Vector3(1, 0, 0), (0.1f * RotateSpeed));
+		}
+		else
+		{
+			RotateObjectLocal(new Vector3(1, 0, 0), (0f * RotateSpeed));
+		}
 	}
 }

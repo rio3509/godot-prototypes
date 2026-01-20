@@ -30,5 +30,5 @@ shadow_enabled = true
 [node name="CameraPivot" type="Marker3D" parent="."]
 
 [node name="Camera" type="Camera3D" parent="CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.86602545, 0.5, 0, -0.5, 0.86602545, 0, 11, 16)
+transform = Transform3D(1, 0, 0, 0, 1, -2.9802322e-08, 0, 2.9802322e-08, 1, 0, 9.776278, 14.544785)
 script = ExtResource("2_lmnpv")
