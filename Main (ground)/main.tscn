@@ -1,21 +1,30 @@
-[gd_scene load_steps=5 format=3 uid="uid://bsngnhwrasnrl"]
+[gd_scene load_steps=8 format=3 uid="uid://bsngnhwrasnrl"]
 
+[ext_resource type="Script" uid="uid://dqgq8jqyurtbl" path="res://Main (ground)/Main.cs" id="1_jijab"]
 [ext_resource type="PackedScene" uid="uid://crfjkjjrjbyiv" path="res://Buildings/Buildings.tscn" id="1_lmnpv"]
 [ext_resource type="Script" uid="uid://dq6busk65d3xr" path="res://Main (ground)/Camera.cs" id="2_lmnpv"]
+[ext_resource type="Script" uid="uid://bynq31v6b1652" path="res://Main (ground)/ScoreLabel.cs" id="3_trtuy"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_p0b2i"]
 size = Vector3(20, 2, 20)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jijab"]
+albedo_color = Color(0.7490196, 0, 0, 1)
+
 [sub_resource type="BoxMesh" id="BoxMesh_81rrn"]
+material = SubResource("StandardMaterial3D_jijab")
 size = Vector3(20, 2, 20)
 
 [node name="Main" type="Node"]
+script = ExtResource("1_jijab")
+BuildingScene = ExtResource("1_lmnpv")
 
 [node name="Ground" type="StaticBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 shape = SubResource("BoxShape3D_p0b2i")
+debug_color = Color(0.40527737, 0.46714622, 1, 0.41960785)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
@@ -32,3 +41,19 @@ shadow_enabled = true
 [node name="Camera" type="Camera3D" parent="CameraPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, -2.9802322e-08, 0, 2.9802322e-08, 1, 0, 9.776278, 14.544785)
 script = ExtResource("2_lmnpv")
+
+[node name="UserInterface" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ScoreLabel" type="Label" parent="UserInterface"]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 51.0
+offset_right = 126.0
+offset_bottom = 74.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Score: 0"
+script = ExtResource("3_trtuy")
