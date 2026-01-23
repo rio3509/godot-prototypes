@@ -94,11 +94,11 @@ public partial class Camera : Camera3D
 		}
 		
 		//vertical mouse rotation
-		if (mousePos.Y > (648 + 500) / 2)
+		if (mousePos.Y > (648 + 550) / 2)
 		{
 			RotateObjectLocal(new Vector3(1, 0, 0), (-0.1f * RotateSpeed));
 		}
-		if (mousePos.Y < (648 - 500) / 2)
+		if (mousePos.Y < (648 - 550) / 2)
 		{
 			RotateObjectLocal(new Vector3(1, 0, 0), (0.1f * RotateSpeed));
 		}

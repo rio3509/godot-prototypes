@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://bsngnhwrasnrl"]
+[gd_scene load_steps=10 format=3 uid="uid://bsngnhwrasnrl"]
 
 [ext_resource type="Script" uid="uid://dqgq8jqyurtbl" path="res://Main (ground)/Main.cs" id="1_jijab"]
 [ext_resource type="PackedScene" uid="uid://crfjkjjrjbyiv" path="res://Buildings/Buildings.tscn" id="1_lmnpv"]
 [ext_resource type="Script" uid="uid://dq6busk65d3xr" path="res://Main (ground)/Camera.cs" id="2_lmnpv"]
 [ext_resource type="Script" uid="uid://bynq31v6b1652" path="res://Main (ground)/ScoreLabel.cs" id="3_trtuy"]
+[ext_resource type="PackedScene" uid="uid://byakk3edrberp" path="res://SettingButton/SettingButton.tscn" id="3_vrs1a"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_p0b2i"]
 size = Vector3(20, 2, 20)
@@ -15,9 +16,13 @@ albedo_color = Color(0.7490196, 0, 0, 1)
 material = SubResource("StandardMaterial3D_jijab")
 size = Vector3(20, 2, 20)
 
+[sub_resource type="LabelSettings" id="LabelSettings_vrs1a"]
+
 [node name="Main" type="Node"]
 script = ExtResource("1_jijab")
 BuildingScene = ExtResource("1_lmnpv")
+SettingButtonScene = ExtResource("3_vrs1a")
+_spawnBool = true
 
 [node name="Ground" type="StaticBody3D" parent="."]
 
@@ -56,4 +61,5 @@ offset_right = 126.0
 offset_bottom = 74.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Score: 0"
+label_settings = SubResource("LabelSettings_vrs1a")
 script = ExtResource("3_trtuy")

@@ -6,7 +6,7 @@ public partial class Building : Area3D
 	//define initialisation method
 	public void Initialise(Vector3 StartPosition)
 	{
-		//place mob at StartPosition
+		//place building at StartPosition
 		Position = StartPosition;
 	}
 	
