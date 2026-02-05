@@ -77,7 +77,7 @@ public partial class Camera : Camera3D
 		
 		//get mouse position
 		var mousePos = GetViewport().GetMousePosition();
-		GD.Print(mousePos);
+		//GD.Print(mousePos);
 		
 		//horizontal mouse rotation
 		if (mousePos.X > ((1152 + 750) / 2))
