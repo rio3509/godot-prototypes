@@ -25,14 +25,15 @@ SettingButtonScene = ExtResource("3_vrs1a")
 _spawnBool = true
 
 [node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 5)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -2, 0)
 shape = SubResource("BoxShape3D_p0b2i")
 debug_color = Color(0.40527737, 0.46714622, 1, 0.41960785)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -2, 0)
 mesh = SubResource("BoxMesh_81rrn")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -45,7 +46,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7, 0)
 [node name="CameraPivot" type="Marker3D" parent="."]
 
 [node name="Camera" type="Camera3D" parent="CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, -2.9802322e-08, 0, 2.9802322e-08, 1, 0, 9.776278, 14.544785)
+transform = Transform3D(1, 0, 0, 0, 1, -2.9802322e-08, 0, 2.9802322e-08, 1, 5, 9.776278, 23.544785)
 script = ExtResource("2_lmnpv")
 
 [node name="UserInterface" type="Control" parent="."]

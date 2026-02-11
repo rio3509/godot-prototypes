@@ -41,7 +41,7 @@ public partial class Main : Node
 			//instantiate building
 			Building cityBuilding = BuildingScene.Instantiate<Building>();
 
-			// Prints a random integer between 10 and 60.
+			// This prints a random integer between 10 and 60:
 			//GD.Print(GD.Randi() % 51 + 10);
 			
 			//get random position on the ground within the given land area (between 10 and -10)
@@ -60,11 +60,39 @@ public partial class Main : Node
 
 			cityBuilding.Initialise(randomPos, cityBuildingW, cityBuildingD, cityBuildingH);
 			
-			//if the given building overlaps with another building then find another random position
+			//if the given building overlaps with another building then find another random position - use OnBodyEntered() to check if there are collisions with anything
 			//if this fails 3 times move on to the next building
 			
-			//add the city building as a child
-			AddChild(cityBuilding);
+			for (int j = 0; j < 4; j++)
+			{
+				if (cityBuilding.OnBodyEntered())
+				{
+					//the building to be placed is colliding with something; re-initialise it with new coords
+					randX = (GD.Randi() % 10);
+					randZ = (GD.Randi() % 10);
+					randomPos = new Vector3(randX, Y, randZ);
+					
+					//cityBuilding.Initialise(randomPos, cityBuildingW, cityBuildingD, cityBuildingH);
+					cityBuilding.Position = randomPos;
+				}
+				else
+				{
+					//the building is "fine"; we can stop the loop and move onto the next building
+					j = 3;
+				}
+			}
+			
+			//check one last time for any overlaps
+			if (cityBuilding.OnBodyEntered())
+			{
+				//delete building instance
+				cityBuilding.QueueFree();
+			}
+			else
+			{
+				//add the city building as a child
+				AddChild(cityBuilding);
+			}
 			
 		}
 	}
@@ -87,6 +115,7 @@ public partial class Main : Node
 		//spawn the settings button on the first physics frame
 		if (_spawnBool == true)
 		{
+			//test arrays
 			Godot.Collections.Array widths = [1, 2];
 			Godot.Collections.Array depths = [3, 2];
 			Godot.Collections.Array heights = [1, 5];

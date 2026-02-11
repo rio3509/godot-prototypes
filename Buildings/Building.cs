@@ -10,7 +10,6 @@ public partial class Building : RigidBody3D
 	[Export]
 	public float Height { get; set; }
 	
-	public bool MouseIn { get; set; }
 	
 	//define initialisation method
 	public void Initialise(Vector3 StartPosition, float width, float depth, float height)
@@ -20,16 +19,20 @@ public partial class Building : RigidBody3D
 		Width = width;
 		Depth = depth;
 		Height = height;
-		//test
-		var scale2 = GetScale();
-		GD.Print(scale2);
 		
+		//define scale factor and apply it to mesh / collider / rigidBody to enlarge the building
 		Vector3 scaleVector = new Vector3(Width, Depth, Height);
 		CollisionShape3D collider = GetNode<CollisionShape3D>("CollisionShape3D");
 		MeshInstance3D mesh = GetNode<MeshInstance3D>("MeshInstance3D");
+		//RigidBody3D body = GetNode<RigidBody3D>("Building");
 		
 		collider.SetScale(scaleVector);
 		mesh.SetScale(scaleVector);
+		//body.SetScale(scaleVector);
+		
+		//test
+		var scale2 = GetScale();
+		GD.Print(scale2);
 	}
 	
 	//this may not be needed in future
@@ -39,22 +42,19 @@ public partial class Building : RigidBody3D
 		QueueFree();
 	}
 	
-	//define force applier
+	//define force applier - unnecessary?
 	public void AddForce(Vector3 forceDirection, Vector3 forcePosition)
 	{
 		ApplyForce(forceDirection, forcePosition);
 	}
 	
-	//check if the mouse is in the building or not
-	public void OnMouseEntered()
+	//check if a body has entered the building
+	public bool OnBodyEntered()
 	{
-		MouseIn = true;
+		//OnBodyEntered returns a node3D signal by default, so this might return errors but still works
+		return true;
 	}
 	
-	public void OnMouseExited()
-	{
-		MouseIn = false;
-	}
 	
 	//physics process
 	public override void _PhysicsProcess(double delta)
