@@ -8,16 +8,16 @@ public partial class Main : Node
 	//import building scene
 	[Export]
 	public PackedScene BuildingScene { get; set; }
-	//import settings button scene
-	[Export]
-	public PackedScene SettingButtonScene { get; set; }
-	//define boolean for spawning
-	[Export]
-	public bool _spawnBool { get; set; }
+	
 	//define boolean for whether the settings are open or not
 	public bool settingsOpen { get; set; }
 	
+	//testing variable
+	[Export]
+	public bool spawnBool { get; set; }
 	
+	
+	//this is a test method and will be removed later
 	private void SpawnBuilding(Vector3 position, Vector3 scale)
 	{
 		//create a new instance of the building model
@@ -47,7 +47,7 @@ public partial class Main : Node
 			//get random position on the ground within the given land area (between 10 and -10)
 			var randX = (GD.Randi() % 10);
 			var randZ = (GD.Randi() % 10);
-			var Y = 2;
+			var Y = 5;
 			
 			Vector3 randomPos = new Vector3(randX, Y, randZ);
 			
@@ -82,56 +82,69 @@ public partial class Main : Node
 				}
 			}
 			
-			//check one last time for any overlaps
-			if (cityBuilding.OnBodyEntered())
-			{
-				//delete building instance
-				cityBuilding.QueueFree();
-			}
-			else
-			{
-				//add the city building as a child
-				AddChild(cityBuilding);
-			}
+			
+			AddChild(cityBuilding);
+			//check one last time for any overlaps - this DOESN'T work as it considers the building touching the ground to be an overlap
+			//if (cityBuilding.OnBodyEntered())
+			//{
+				////delete building instance + add its number to the "failed" list
+				////cityBuilding.QueueFree();
+				//AddChild(cityBuilding);
+			//}
+			//else
+			//{
+				////add the city building as a child if it works
+				////AddChild(cityBuilding);
+			//}
 			
 		}
 	}
 	
-	private void SpawnSettingButton()
+	
+	//when mouse enters the settings button set _settingsOpen to true; this stops camera movement and opens the menu
+	public void OnUIMouseEntered()
 	{
-		//create a new instance of the settings button
-		SettingButton button = SettingButtonScene.Instantiate<SettingButton>();
+		//stop camera movement
+		settingsOpen = true;
 		
-		//spawn settings button by adding it as a child of the main scene
-		AddChild(button);
+		//open settings - set all child nodes to visible (THIS IS VERY SLOW and could be optimised later)
+		Control UserInterface = GetNode<Control>("UserInterface");
 		
-		//set _spawnBool to false to prevent further spawning
-		_spawnBool = false;
+		Godot.Collections.Array<Godot.Node> controlNodes = UserInterface.FindChildren("?", "Control", true, false);
+		
+		GD.Print(controlNodes);
+		
+		//iterate through child nodes to set their .Visible to true
+		foreach (Godot.Control node in controlNodes)
+		{
+			node.SetVisible(true);
+		}
+		
 	}
 	
 	//create an instance of a building when a key is pressed
 	public override void _PhysicsProcess(double delta)
 	{
-		//spawn the settings button on the first physics frame
-		if (_spawnBool == true)
+		//spawn city on first physics frame
+		if (spawnBool == true)
 		{
-			//test arrays
+			//test arrays - might need to change to just array instead of Godot.Collections.Array since it's faster for iteration
 			Godot.Collections.Array widths = [1, 2];
 			Godot.Collections.Array depths = [3, 2];
-			Godot.Collections.Array heights = [1, 5];
-			
-			SpawnRandomCity(2, widths, depths, heights);
-			Vector3 _test = new Vector3(2, 5, 2);
-			//SpawnBuilding(Vector3.One, _test);
-			SpawnSettingButton();
-			settingsOpen = false;
+			Godot.Collections.Array heights = [1, 3];
+			var buildingAmount = 2;
+			SpawnRandomCity(buildingAmount, widths, depths, heights);
+			spawnBool = false;
 		}
+		
 		
 		//check if the player is in the settings or not
 		if (settingsOpen == true)
 		{
 			//stop camera
-				
+			
+			//get building values with settings button
+			
 		}
 		
 		//check if the player wanted to spawn a building

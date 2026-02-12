@@ -9,6 +9,8 @@ public partial class Building : RigidBody3D
 	public float Depth { get; set; }
 	[Export]
 	public float Height { get; set; }
+	[Export]
+	public bool Overlap { get; set; }
 	
 	
 	//define initialisation method
@@ -28,7 +30,7 @@ public partial class Building : RigidBody3D
 		
 		collider.SetScale(scaleVector);
 		mesh.SetScale(scaleVector);
-		//body.SetScale(scaleVector);
+		SetScale(scaleVector);
 		
 		//test
 		var scale2 = GetScale();
@@ -52,6 +54,7 @@ public partial class Building : RigidBody3D
 	public bool OnBodyEntered()
 	{
 		//OnBodyEntered returns a node3D signal by default, so this might return errors but still works
+		Overlap = true;
 		return true;
 	}
 	
