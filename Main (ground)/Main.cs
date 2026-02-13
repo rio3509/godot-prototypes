@@ -17,7 +17,7 @@ public partial class Main : Node
 	public bool spawnBool { get; set; }
 	
 	
-	//this is a test method and will be removed later
+	//this is a test method and may be removed later
 	private void SpawnBuilding(Vector3 position, Vector3 scale)
 	{
 		//create a new instance of the building model
@@ -84,6 +84,9 @@ public partial class Main : Node
 			
 			
 			AddChild(cityBuilding);
+			
+			spawnBool = false;
+			
 			//check one last time for any overlaps - this DOESN'T work as it considers the building touching the ground to be an overlap
 			//if (cityBuilding.OnBodyEntered())
 			//{
@@ -104,13 +107,14 @@ public partial class Main : Node
 	//when mouse enters the settings button set _settingsOpen to true; this stops camera movement and opens the menu
 	public void OnUIMouseEntered()
 	{
+		GD.Print("UIENTERED");
 		//stop camera movement
 		settingsOpen = true;
 		
 		//open settings - set all child nodes to visible (THIS IS VERY SLOW and could be optimised later)
 		Control UserInterface = GetNode<Control>("UserInterface");
 		
-		Godot.Collections.Array<Godot.Node> controlNodes = UserInterface.FindChildren("?", "Control", true, false);
+		Godot.Collections.Array<Godot.Node> controlNodes = UserInterface.FindChildren("HSlider", "", true, true);
 		
 		GD.Print(controlNodes);
 		
@@ -118,9 +122,12 @@ public partial class Main : Node
 		foreach (Godot.Control node in controlNodes)
 		{
 			node.SetVisible(true);
+			node.SetMouseFilter(0);
 		}
 		
 	}
+	
+	
 	
 	//create an instance of a building when a key is pressed
 	public override void _PhysicsProcess(double delta)
@@ -128,12 +135,15 @@ public partial class Main : Node
 		//spawn city on first physics frame
 		if (spawnBool == true)
 		{
+			//initialise camera
+			//Camera3D camera = GetNode<Camera3D>("CameraPivot/Camera");
 			//test arrays - might need to change to just array instead of Godot.Collections.Array since it's faster for iteration
 			Godot.Collections.Array widths = [1, 2];
 			Godot.Collections.Array depths = [3, 2];
 			Godot.Collections.Array heights = [1, 3];
 			var buildingAmount = 2;
 			SpawnRandomCity(buildingAmount, widths, depths, heights);
+			GetNode<HSlider>("HSlider").SetVisible(true);
 			spawnBool = false;
 		}
 		
@@ -142,7 +152,9 @@ public partial class Main : Node
 		if (settingsOpen == true)
 		{
 			//stop camera
-			
+			Camera3D camera = GetNode<Camera3D>("CameraPivot/Camera");
+			//camera.disabled = true;
+			camera.SetPhysicsProcess(false);
 			//get building values with settings button
 			
 		}

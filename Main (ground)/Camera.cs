@@ -11,11 +11,21 @@ public partial class Camera : Camera3D
 	[Export]
 	public float RotateSpeed { get; set; } = 0.5f;
 	
+	//set enable / disable bool
+	[Export]
+	public bool disabled { get; set; }
+	
 	//set targetvelocity to 0
 	private Vector3 _targetVelocity = Vector3.Zero;
 	 
 	public override void _PhysicsProcess(double delta)
 	{
+		//check if the script is disabled or not
+		if (disabled)
+		{
+			return ;
+		}
+		
 		//MOVEMENT
 		
 		//local variable for input direction
