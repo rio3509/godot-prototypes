@@ -9,9 +9,6 @@ public partial class Main : Node
 	[Export]
 	public PackedScene BuildingScene { get; set; }
 	
-	//define boolean for whether the settings are open or not
-	public bool settingsOpen { get; set; }
-	
 	//testing variable
 	[Export]
 	public bool spawnBool { get; set; }
@@ -109,14 +106,15 @@ public partial class Main : Node
 	{
 		GD.Print("UIENTERED");
 		//stop camera movement
-		settingsOpen = true;
+		Camera3D camera = GetNode<Camera3D>("CameraPivot/Camera");
+		camera.SetPhysicsProcess(false);
 		
 		//open settings - set all child nodes to visible (THIS IS VERY SLOW and could be optimised later)
 		Control UserInterface = GetNode<Control>("UserInterface");
 		
 		Godot.Collections.Array<Godot.Node> controlNodes = UserInterface.FindChildren("HSlider", "", true, true);
 		
-		GD.Print(controlNodes);
+		//GD.Print(controlNodes);
 		
 		//iterate through child nodes to set their .Visible to true
 		foreach (Godot.Control node in controlNodes)
@@ -127,7 +125,15 @@ public partial class Main : Node
 		
 	}
 	
-	
+	//when mouse exits the settings set _settingsOpen to false; this resumes camera movement and closes the menu
+	public void OnUIMouseExited()
+	{
+		GD.Print("UIEXITED");
+		//allow camera movement
+		Camera3D camera = GetNode<Camera3D>("CameraPivot/Camera");
+		camera.SetPhysicsProcess(true);
+		
+	}
 	
 	//create an instance of a building when a key is pressed
 	public override void _PhysicsProcess(double delta)
@@ -143,21 +149,9 @@ public partial class Main : Node
 			Godot.Collections.Array heights = [1, 3];
 			var buildingAmount = 2;
 			SpawnRandomCity(buildingAmount, widths, depths, heights);
-			GetNode<HSlider>("HSlider").SetVisible(true);
 			spawnBool = false;
 		}
 		
-		
-		//check if the player is in the settings or not
-		if (settingsOpen == true)
-		{
-			//stop camera
-			Camera3D camera = GetNode<Camera3D>("CameraPivot/Camera");
-			//camera.disabled = true;
-			camera.SetPhysicsProcess(false);
-			//get building values with settings button
-			
-		}
 		
 		//check if the player wanted to spawn a building
 		if (Input.IsActionPressed("spawn_building"))

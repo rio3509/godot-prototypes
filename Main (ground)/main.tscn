@@ -21,22 +21,23 @@ spawnBool = true
 
 [node name="UserInterface" type="Control" parent="."]
 layout_mode = 3
-offset_right = 94.0
-offset_bottom = 50.0
+anchors_preset = 0
+offset_right = 202.0
+offset_bottom = 31.0
 
 [node name="SettingsButton" type="Button" parent="UserInterface"]
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
+mouse_filter = 1
 text = "Settings"
 
 [node name="HSlider" type="HSlider" parent="UserInterface"]
-visible = false
 layout_mode = 0
-offset_top = 34.0
+offset_top = 26.0
 offset_right = 201.0
-offset_bottom = 50.0
-mouse_filter = 2
+offset_bottom = 56.0
+mouse_filter = 1
 
 [node name="Ground" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 5)
@@ -64,3 +65,4 @@ transform = Transform3D(1, 0, 0, 0, 1, -2.9802322e-08, 0, 2.9802322e-08, 1, 5, 9
 script = ExtResource("2_lmnpv")
 
 [connection signal="mouse_entered" from="UserInterface" to="." method="OnUIMouseEntered"]
+[connection signal="mouse_exited" from="UserInterface" to="." method="OnUIMouseExited"]
