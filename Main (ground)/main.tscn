@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dqgq8jqyurtbl" path="res://Main (ground)/Main.cs" id="1_jijab"]
 [ext_resource type="PackedScene" uid="uid://crfjkjjrjbyiv" path="res://Buildings/Buildings.tscn" id="1_lmnpv"]
-[ext_resource type="Script" uid="uid://dq6busk65d3xr" path="res://Main (ground)/Camera.cs" id="2_lmnpv"]
+[ext_resource type="Script" uid="uid://cl30vf0osqqvd" path="res://Main (ground)/CameraRoot.cs" id="3_trtuy"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_p0b2i"]
 size = Vector3(20, 2, 20)
@@ -17,7 +17,6 @@ size = Vector3(20, 2, 20)
 [node name="Main" type="Node"]
 script = ExtResource("1_jijab")
 BuildingScene = ExtResource("1_lmnpv")
-spawnBool = true
 
 [node name="UserInterface" type="Control" parent="."]
 layout_mode = 3
@@ -58,11 +57,16 @@ shadow_enabled = true
 [node name="Buildings" parent="." instance=ExtResource("1_lmnpv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7, 0)
 
-[node name="CameraPivot" type="Marker3D" parent="."]
+[node name="CameraRoot" type="Node" parent="." node_paths=PackedStringArray("_rotationHelper", "_camera")]
+script = ExtResource("3_trtuy")
+_rotationHelper = NodePath("CameraPivot")
+_camera = NodePath("CameraPivot/Camera")
 
-[node name="Camera" type="Camera3D" parent="CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, -2.9802322e-08, 0, 2.9802322e-08, 1, 5, 9.776278, 23.544785)
-script = ExtResource("2_lmnpv")
+[node name="CameraPivot" type="Node3D" parent="CameraRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Camera" type="Camera3D" parent="CameraRoot/CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, -2.9802322e-08, 0, 2.9802322e-08, 1, 0, 0, 0)
 
 [connection signal="mouse_entered" from="UserInterface" to="." method="OnUIMouseEntered"]
 [connection signal="mouse_exited" from="UserInterface" to="." method="OnUIMouseExited"]

@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Camera : Camera3D
+public partial class CameraRoot : Node
 {
 	
 	//3D code takes measurements in METERS not pixels
@@ -29,7 +29,7 @@ public partial class Camera : Camera3D
 	{
 		if (triggered != true)
 		{
-			//_rotationHelper = GetNode<Node3D>("/Main/CameraPivot");
+			//_rotationHelper = GetNode<Node3D>("CameraPivot");
 			Input.MouseMode = Input.MouseModeEnum.Captured;
 			triggered = true;
 		}
@@ -76,7 +76,7 @@ public partial class Camera : Camera3D
 		direction += cameraTransform.Basis.X * inputMovement.X;
 		
 		  // Moving the camera and the camera pivot
-		GlobalTranslate(direction);
+		_camera.GlobalTranslate(direction);
 		_rotationHelper.GlobalTranslate(direction);
 		//Vector3 position = GetGlobalPosition();
 		//position += _targetVelocity;
