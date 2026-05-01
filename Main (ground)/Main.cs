@@ -13,6 +13,9 @@ public partial class Main : Node
 	[Export]
 	public bool spawnBool { get; set; }
 	
+	private int timer;
+	private Godot.Collections.Array buildingsList = [];
+	
 	
 	//this is a test method and may be removed later
 	private void SpawnBuilding(Vector3 position, Vector3 scale)
@@ -26,7 +29,15 @@ public partial class Main : Node
 		//spawn building by adding it as a child of the main scene
 		AddChild(building);
 		//apply force to move it slightly
-		building.AddForce(new Vector3(10, 5, 10), new Vector3(1, 1, 0));
+		//building.AddForce(new Vector3(10, 5, 10), new Vector3(1, 1, 0));
+		
+		//append to buildings list array
+		int count = buildingsList.Count;
+		
+		buildingsList.Resize(count + 1);
+		buildingsList[count] = building;
+		
+		GD.Print(buildingsList);
 	}
 	
 	//spawn random city based on building inputs
@@ -62,7 +73,7 @@ public partial class Main : Node
 			
 			for (int j = 0; j < 4; j++)
 			{
-				if (cityBuilding.OnBodyEntered())
+				if (cityBuilding.OnBodyEntered2())
 				{
 					//the building to be placed is colliding with something; re-initialise it with new coords
 					randX = (GD.Randi() % 10);
@@ -138,6 +149,8 @@ public partial class Main : Node
 	//create an instance of a building when a key is pressed
 	public override void _PhysicsProcess(double delta)
 	{
+		timer -= 1;
+		
 		//spawn city on first physics frame
 		if (spawnBool == true)
 		{
@@ -148,15 +161,29 @@ public partial class Main : Node
 			Godot.Collections.Array depths = [3, 2];
 			Godot.Collections.Array heights = [1, 3];
 			var buildingAmount = 2;
-			SpawnRandomCity(buildingAmount, widths, depths, heights);
+			//SpawnRandomCity(buildingAmount, widths, depths, heights);
 			spawnBool = false;
 		}
 		
 		
 		//check if the player wanted to spawn a building
-		if (Input.IsActionPressed("spawn_building"))
+		if (Input.IsActionPressed("spawn_building") && (timer <= 0))
 		{
-			SpawnBuilding(Vector3.One, Vector3.One);
+			//implement 10-frame timer to prevent spawn spam
+			timer = 10;
+			
+			var randX = (GD.Randi() % 10);
+			var randZ = (GD.Randi() % 10);
+			var randY = (GD.Randi() % 10);
+			var randomPos = new Vector3(randX, 20, randZ);
+			
+			//add 1 each time to prevent a scale of 0
+			randX = (GD.Randi() % 10) + 1;
+			randZ = (GD.Randi() % 10) + 1;
+			randY = (GD.Randi() % 10) + 1;
+			var randomScale = new Vector3(randX, randY, randZ);
+			
+			SpawnBuilding(randomPos, randomScale);
 		}
 	}
 }

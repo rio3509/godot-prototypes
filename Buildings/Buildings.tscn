@@ -3,10 +3,13 @@
 [ext_resource type="Script" uid="uid://dm02gpn06sudu" path="res://Buildings/Building.cs" id="1_evlqh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_evlqh"]
+resource_local_to_scene = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_xbg2y"]
 
 [node name="Building" type="RigidBody3D"]
+physics_interpolation_mode = 1
+continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 5
 script = ExtResource("1_evlqh")

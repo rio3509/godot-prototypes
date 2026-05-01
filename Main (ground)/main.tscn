@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bsngnhwrasnrl"]
+[gd_scene load_steps=10 format=3 uid="uid://bsngnhwrasnrl"]
 
-[ext_resource type="Script" uid="uid://dqgq8jqyurtbl" path="res://Main (ground)/Main.cs" id="1_jijab"]
 [ext_resource type="PackedScene" uid="uid://crfjkjjrjbyiv" path="res://Buildings/Buildings.tscn" id="1_lmnpv"]
+[ext_resource type="Script" uid="uid://dqgq8jqyurtbl" path="res://Main (ground)/Main.cs" id="1_trtuy"]
 [ext_resource type="Script" uid="uid://cl30vf0osqqvd" path="res://Main (ground)/CameraRoot.cs" id="3_trtuy"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_p0b2i"]
@@ -14,9 +14,17 @@ albedo_color = Color(0.7490196, 0, 0, 1)
 material = SubResource("StandardMaterial3D_jijab")
 size = Vector3(20, 2, 20)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_trtuy"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_jijab"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vrs1a"]
+albedo_color = Color(0, 1, 1, 1)
+
 [node name="Main" type="Node"]
-script = ExtResource("1_jijab")
+script = ExtResource("1_trtuy")
 BuildingScene = ExtResource("1_lmnpv")
+spawnBool = true
 
 [node name="UserInterface" type="Control" parent="."]
 layout_mode = 3
@@ -39,14 +47,18 @@ offset_bottom = 56.0
 mouse_filter = 1
 
 [node name="Ground" type="StaticBody3D" parent="."]
+physics_interpolation_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 5)
+disable_mode = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+physics_interpolation_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -2, 0)
 shape = SubResource("BoxShape3D_p0b2i")
 debug_color = Color(0.40527737, 0.46714622, 1, 0.41960785)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+physics_interpolation_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -2, 0)
 mesh = SubResource("BoxMesh_81rrn")
 
@@ -63,10 +75,20 @@ _rotationHelper = NodePath("CameraPivot")
 _camera = NodePath("CameraPivot/Camera")
 
 [node name="CameraPivot" type="Node3D" parent="CameraRoot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 6.8569403)
 
 [node name="Camera" type="Camera3D" parent="CameraRoot/CameraPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, -2.9802322e-08, 0, 2.9802322e-08, 1, 0, 0, 0)
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1950014, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("BoxShape3D_trtuy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
+mesh = SubResource("BoxMesh_jijab")
+surface_material_override/0 = SubResource("StandardMaterial3D_vrs1a")
 
 [connection signal="mouse_entered" from="UserInterface" to="." method="OnUIMouseEntered"]
 [connection signal="mouse_exited" from="UserInterface" to="." method="OnUIMouseExited"]

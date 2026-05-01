@@ -12,6 +12,8 @@ public partial class Building : RigidBody3D
 	[Export]
 	public bool Overlap { get; set; }
 	
+	public Node3D test { get; set; }
+	
 	
 	//define initialisation method
 	public void Initialise(Vector3 StartPosition, float width, float depth, float height)
@@ -25,12 +27,14 @@ public partial class Building : RigidBody3D
 		//define scale factor and apply it to mesh / collider / rigidBody to enlarge the building
 		Vector3 scaleVector = new Vector3(Width, Depth, Height);
 		CollisionShape3D collider = GetNode<CollisionShape3D>("CollisionShape3D");
-		MeshInstance3D mesh = GetNode<MeshInstance3D>("MeshInstance3D");
-		//RigidBody3D body = GetNode<RigidBody3D>("Building");
 		
-		collider.SetScale(scaleVector);
+		//CollisionShape3D collider = GetChild(0) as CollisionShape3D;
+		BoxShape3D colliderBox = collider.GetShape() as BoxShape3D;
+		MeshInstance3D mesh = GetNode<MeshInstance3D>("MeshInstance3D");
+		
+		colliderBox.Size = scaleVector;
 		mesh.SetScale(scaleVector);
-		SetScale(scaleVector);
+		//SetScale(scaleVector);
 		
 		//test
 		var scale2 = GetScale();
@@ -50,8 +54,13 @@ public partial class Building : RigidBody3D
 		ApplyForce(forceDirection, forcePosition);
 	}
 	
+	public void OnBodyEntered(Node node)
+	{
+		OnBodyEntered2();
+	}
+	
 	//check if a body has entered the building
-	public bool OnBodyEntered()
+	public bool OnBodyEntered2()
 	{
 		//OnBodyEntered returns a node3D signal by default, so this might return errors but still works
 		Overlap = true;

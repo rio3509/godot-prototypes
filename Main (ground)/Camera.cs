@@ -19,6 +19,9 @@ public partial class Camera : Camera3D
 	public float RotateSpeed { get; set; } = 0.5f;
 	
 	public bool triggered { get; set; } = false;
+	public bool mouseLocked { get; set; } = true;
+	private int timer;
+	public float pitch { get; set; } = 0.0f;
 	
 	
 	//set targetvelocity to 0
@@ -27,9 +30,35 @@ public partial class Camera : Camera3D
 	 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (Input.IsActionPressed("toggle_mouse"))
+		{
+			if (timer > 0)
+			{
+				timer -= 1;
+			}
+			else
+			{
+				timer = 20;
+				
+				if (mouseLocked)
+				{
+					GD.Print("UNLOCKMOUSE");
+					Input.MouseMode = Input.MouseModeEnum.Visible;
+					mouseLocked = false;
+				}
+				else
+				{
+					GD.Print("LOCKMOUSE");
+					mouseLocked = true;
+					Input.MouseMode = Input.MouseModeEnum.Captured;
+				}
+			}
+			
+		}
+		
+		
 		if (triggered != true)
 		{
-			//_rotationHelper = GetNode<Node3D>("/Main/CameraPivot");
 			Input.MouseMode = Input.MouseModeEnum.Captured;
 			triggered = true;
 		}
@@ -58,6 +87,7 @@ public partial class Camera : Camera3D
 		if (Input.IsActionPressed("move_left"))
 		{
 			inputMovement.X -= 1.0f;
+			Input.MouseMode = Input.MouseModeEnum.Visible;
 		}
 		//code forward/backward (z) movement
 		if (Input.IsActionPressed("move_forward"))
@@ -77,7 +107,7 @@ public partial class Camera : Camera3D
 		
 		  // Moving the camera and the camera pivot
 		GlobalTranslate(direction);
-		_rotationHelper.GlobalTranslate(direction);
+		//_rotationHelper.GlobalTranslate(direction);
 		//Vector3 position = GetGlobalPosition();
 		//position += _targetVelocity;
 		//SetGlobalPosition(position);
@@ -101,19 +131,40 @@ public partial class Camera : Camera3D
 	}
 	
 	//ROTATION
-	public override void _Input(InputEvent @event)
+	public override void _UnhandledInput(InputEvent @event)
 	{
+		//if (@event is InputEventMouseMotion && Input.GetMouseMode() == Input.MouseModeEnum.Captured)
+		//{
+			//InputEventMouseMotion mouseEvent = @event as InputEventMouseMotion;
+			////_rotationHelper.RotateX(Mathf.DegToRad(-mouseEvent.Relative.Y * MOUSE_SENSITIVITY));
+			//_rotationHelper.RotateObjectLocal(new Vector3(1, 0, 0), (Mathf.DegToRad(-mouseEvent.Relative.Y * MOUSE_SENSITIVITY)));
+			////RotateY(Mathf.DegToRad(-mouseEvent.Relative.X * MOUSE_SENSITIVITY));
+			//_rotationHelper.RotateObjectLocal(new Vector3(0, 1, 0), (Mathf.DegToRad(-mouseEvent.Relative.X * MOUSE_SENSITIVITY)));
+			//
+			//Vector3 cameraRot = _rotationHelper.RotationDegrees;
+			//cameraRot.X = Mathf.Clamp(cameraRot.X, -70, 70);
+			//_rotationHelper.RotationDegrees = cameraRot;
+			
+		
 		if (@event is InputEventMouseMotion && Input.GetMouseMode() == Input.MouseModeEnum.Captured)
 		{
 			InputEventMouseMotion mouseEvent = @event as InputEventMouseMotion;
-			//_rotationHelper.RotateX(Mathf.DegToRad(-mouseEvent.Relative.Y * MOUSE_SENSITIVITY));
-			_rotationHelper.RotateObjectLocal(new Vector3(1, 0, 0), (Mathf.DegToRad(-mouseEvent.Relative.Y * MOUSE_SENSITIVITY)));
-			//RotateY(Mathf.DegToRad(-mouseEvent.Relative.X * MOUSE_SENSITIVITY));
-			_rotationHelper.RotateObjectLocal(new Vector3(0, 1, 0), (Mathf.DegToRad(-mouseEvent.Relative.X * MOUSE_SENSITIVITY)));
+			//Yaw rotation (horizontal)
+			//_rotationHelper.RotateObjectLocal(Vector3.Up, (-mouseEvent.Relative.X * MOUSE_SENSITIVITY));
+			_rotationHelper.RotateY(-mouseEvent.Relative.X * MOUSE_SENSITIVITY);
 			
-			Vector3 cameraRot = _rotationHelper.RotationDegrees;
-			cameraRot.X = Mathf.Clamp(cameraRot.X, -70, 70);
-			_rotationHelper.RotationDegrees = cameraRot;
+			
+			//Pitch rotation (vertical)
+			//pitch = pitch - (mouseEvent.Relative.Y * MOUSE_SENSITIVITY);
+			//pitch = Mathf.Clamp(pitch, Mathf.DegToRad(-180), Mathf.DegToRad(180)); //Limit pitch to avoid unwanted rolling
+			//_camera.SetRotation(new Vector3(pitch, _camera.Rotation.Y, 0 ));
+			
+			_camera.RotateX(-mouseEvent.Relative.Y * MOUSE_SENSITIVITY);
+			
+			var camRot = _camera.GetRotation();
+			camRot.X = Mathf.Clamp(_camera.Rotation.X, Mathf.DegToRad(-30), Mathf.DegToRad(60));
+			
+			_camera.SetRotation(camRot);
 		}
 	}
 }
