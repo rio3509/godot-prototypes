@@ -26,15 +26,13 @@ public partial class Building : RigidBody3D
 		
 		//define scale factor and apply it to mesh / collider / rigidBody to enlarge the building
 		Vector3 scaleVector = new Vector3(Width, Depth, Height);
-		CollisionShape3D collider = GetNode<CollisionShape3D>("CollisionShape3D");
 		
-		//CollisionShape3D collider = GetChild(0) as CollisionShape3D;
+		CollisionShape3D collider = GetChild(0) as CollisionShape3D;
 		BoxShape3D colliderBox = collider.GetShape() as BoxShape3D;
 		MeshInstance3D mesh = GetNode<MeshInstance3D>("MeshInstance3D");
 		
 		colliderBox.Size = scaleVector;
 		mesh.SetScale(scaleVector);
-		//SetScale(scaleVector);
 		
 		//test
 		var scale2 = GetScale();

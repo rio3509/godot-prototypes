@@ -172,15 +172,15 @@ public partial class Main : Node
 			//implement 10-frame timer to prevent spawn spam
 			timer = 10;
 			
-			var randX = (GD.Randi() % 10);
-			var randZ = (GD.Randi() % 10);
-			var randY = (GD.Randi() % 10);
-			var randomPos = new Vector3(randX, 20, randZ);
+			var randX = (GD.Randi() % 15);
+			var randZ = (GD.Randi() % 15);
+			var randY = (GD.Randi() % 15);
+			var randomPos = new Vector3(randX, 2, randZ);
 			
 			//add 1 each time to prevent a scale of 0
-			randX = (GD.Randi() % 10) + 1;
-			randZ = (GD.Randi() % 10) + 1;
-			randY = (GD.Randi() % 10) + 1;
+			randX = (GD.Randi() % 5) + 1;
+			randZ = (GD.Randi() % 5) + 1;
+			randY = (GD.Randi() % 5) + 1;
 			var randomScale = new Vector3(randX, randY, randZ);
 			
 			SpawnBuilding(randomPos, randomScale);
