@@ -69,7 +69,7 @@ shadow_enabled = true
 [node name="Buildings" parent="." instance=ExtResource("1_lmnpv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7, 0)
 
-[node name="CameraRoot" type="Node" parent="." node_paths=PackedStringArray("_rotationHelper", "_camera")]
+[node name="CameraRoot" type="Node3D" parent="." node_paths=PackedStringArray("_rotationHelper", "_camera")]
 script = ExtResource("3_trtuy")
 _rotationHelper = NodePath("CameraPivot")
 _camera = NodePath("CameraPivot/Camera")

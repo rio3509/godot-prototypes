@@ -26,4 +26,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("BoxMesh_xbg2y")
 
 [connection signal="body_entered" from="." to="." method="OnBodyEntered"]
+[connection signal="mouse_entered" from="." to="." method="OnMouseEntered"]
+[connection signal="mouse_exited" from="." to="." method="OnMouseExited"]
 [connection signal="screen_exited" from="VisibleOnScreenNotifier3D" to="." method="OnVisibleOnScreenNotifier3DScreenExited"]

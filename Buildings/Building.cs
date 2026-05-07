@@ -13,7 +13,7 @@ public partial class Building : RigidBody3D
 	public bool Overlap { get; set; }
 	
 	public Node3D test { get; set; }
-	
+	private bool mouseEntered;
 	
 	//define initialisation method
 	public void Initialise(Vector3 StartPosition, float width, float depth, float height)
@@ -65,10 +65,37 @@ public partial class Building : RigidBody3D
 		return true;
 	}
 	
+	public void OnMouseEntered()
+	{
+		//if mouse entered then set boolean to true + vice versa
+		mouseEntered = true;
+		GD.Print("mouseEntered");
+	}
+	
+	public void OnMouseExited()
+	{
+		mouseEntered = false;
+		GD.Print("mouseLeft");
+	}
+	
+	public void buildingSelect()
+	{
+		if (mouseEntered)
+		{
+			 if (Input.IsActionJustPressed("select_building"))
+			{
+				GD.Print("building selected");
+			}
+		}
+	}
 	
 	//physics process
 	public override void _PhysicsProcess(double delta)
 	{
+		//check if the building has been selected
+		buildingSelect();
+		
+		
 		////move the building via click and drag
 		//var mousePosition = GetViewport().GetMousePosition();
 		//

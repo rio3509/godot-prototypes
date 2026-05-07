@@ -1,12 +1,12 @@
 using Godot;
 using System;
 
-public partial class CameraRoot : Node
+public partial class CameraRoot : Node3D
 {
 	
 	//3D code takes measurements in METERS not pixels
 	[Export]
-	public float MOUSE_SENSITIVITY { get; set; } = 0.1f;
+	public float MOUSE_SENSITIVITY { get; set;  } = 0.01f;
 	[Export]
 	public Node3D _rotationHelper { get; set; }
 	[Export]
@@ -18,7 +18,12 @@ public partial class CameraRoot : Node
 	[Export]
 	public float RotateSpeed { get; set; } = 0.5f;
 	
+	[Export]
+	public bool mouseLocked { get; set; } = true;
+	
 	public bool triggered { get; set; } = false;
+	private int timer;
+	public float pitch { get; set; } = 0.0f;
 	
 	
 	//set targetvelocity to 0
@@ -29,7 +34,6 @@ public partial class CameraRoot : Node
 	{
 		if (triggered != true)
 		{
-			//_rotationHelper = GetNode<Node3D>("CameraPivot");
 			Input.MouseMode = Input.MouseModeEnum.Captured;
 			triggered = true;
 		}
@@ -76,22 +80,32 @@ public partial class CameraRoot : Node
 		direction += cameraTransform.Basis.X * inputMovement.X;
 		
 		  // Moving the camera and the camera pivot
-		_camera.GlobalTranslate(direction);
-		_rotationHelper.GlobalTranslate(direction);
-		//Vector3 position = GetGlobalPosition();
-		//position += _targetVelocity;
-		//SetGlobalPosition(position);
-		//Translate(direction);
+		GlobalTranslate(direction);
 		
-		////code up/down (y) movement
-		//if (Input.IsActionPressed("move_up"))
-		//{
-			//direction.Y += 1.0f;
-		//}
-		//if (Input.IsActionPressed("move_down"))
-		//{
-			//direction.Y -= 1.0f;
-		//}
+		if (Input.IsActionPressed("toggle_mouse"))
+		{
+			if (timer > 0)
+			{
+				timer -= 1;
+			}
+			else
+			{
+				timer = 20;
+				
+				if (mouseLocked)
+				{
+					GD.Print("UNLOCKMOUSE");
+					Input.MouseMode = Input.MouseModeEnum.Visible;
+					mouseLocked = false;
+				}
+				else
+				{
+					GD.Print("LOCKMOUSE");
+					mouseLocked = true;
+					Input.MouseMode = Input.MouseModeEnum.Captured;
+				}
+			}
+		}
 }
 	
 	public void ProcessMovement(double delta)
@@ -101,19 +115,25 @@ public partial class CameraRoot : Node
 	}
 	
 	//ROTATION
-	public override void _Input(InputEvent @event)
+	public override void _UnhandledInput(InputEvent @event)
 	{
-		if (@event is InputEventMouseMotion && Input.GetMouseMode() == Input.MouseModeEnum.Captured)
+		if (mouseLocked)
 		{
-			InputEventMouseMotion mouseEvent = @event as InputEventMouseMotion;
-			//_rotationHelper.RotateX(Mathf.DegToRad(-mouseEvent.Relative.Y * MOUSE_SENSITIVITY));
-			_rotationHelper.RotateObjectLocal(new Vector3(1, 0, 0), (Mathf.DegToRad(-mouseEvent.Relative.Y * MOUSE_SENSITIVITY)));
-			//RotateY(Mathf.DegToRad(-mouseEvent.Relative.X * MOUSE_SENSITIVITY));
-			_rotationHelper.RotateObjectLocal(new Vector3(0, 1, 0), (Mathf.DegToRad(-mouseEvent.Relative.X * MOUSE_SENSITIVITY)));
-			
-			Vector3 cameraRot = _rotationHelper.RotationDegrees;
-			cameraRot.X = Mathf.Clamp(cameraRot.X, -70, 70);
-			_rotationHelper.RotationDegrees = cameraRot;
+			if (@event is InputEventMouseMotion && Input.GetMouseMode() == Input.MouseModeEnum.Captured)
+			{
+				InputEventMouseMotion mouseEvent = @event as InputEventMouseMotion;
+				//Yaw rotation (horizontal)
+				//_rotationHelper.RotateObjectLocal(Vector3.Up, (-mouseEvent.Relative.X * MOUSE_SENSITIVITY));
+				_rotationHelper.RotateY(-mouseEvent.Relative.X * MOUSE_SENSITIVITY);
+				
+				
+				//Pitch rotation (vertical)
+				pitch = pitch - (mouseEvent.Relative.Y * MOUSE_SENSITIVITY);
+				pitch = Mathf.Clamp(pitch, Mathf.DegToRad(-180), Mathf.DegToRad(180)); //Limit pitch to avoid unwanted rolling
+				_camera.SetRotation(new Vector3(pitch, _camera.Rotation.Y, 0 ));
+				
+			}
 		}
+		
 	}
 }

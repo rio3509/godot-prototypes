@@ -95,19 +95,6 @@ public partial class Main : Node
 			
 			spawnBool = false;
 			
-			//check one last time for any overlaps - this DOESN'T work as it considers the building touching the ground to be an overlap
-			//if (cityBuilding.OnBodyEntered())
-			//{
-				////delete building instance + add its number to the "failed" list
-				////cityBuilding.QueueFree();
-				//AddChild(cityBuilding);
-			//}
-			//else
-			//{
-				////add the city building as a child if it works
-				////AddChild(cityBuilding);
-			//}
-			
 		}
 	}
 	
